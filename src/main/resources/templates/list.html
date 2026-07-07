@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>意见列表 - 企业内部意见反馈系统</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <div class="app-container">
+        <!-- 页面头部 -->
+        <header class="page-header">
+            <h1>企业内部意见反馈系统</h1>
+            <p>查看所有已提交的意见和建议</p>
+        </header>
+
+        <!-- 导航栏 -->
+        <nav class="nav-bar">
+            <a th:href="@{/submit}" class="nav-link">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 19l7-7 3 3-7 7-3-3z"></path>
+                    <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path>
+                    <path d="M2 2l7.586 7.586"></path>
+                    <circle cx="11" cy="11" r="2"></circle>
+                </svg>
+                提交意见
+            </a>
+            <a th:href="@{/list}" class="nav-link active">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="8" y1="6" x2="21" y2="6"></line>
+                    <line x1="8" y1="12" x2="21" y2="12"></line>
+                    <line x1="8" y1="18" x2="21" y2="18"></line>
+                    <line x1="3" y1="6" x2="3.01" y2="6"></line>
+                    <line x1="3" y1="12" x2="3.01" y2="12"></line>
+                    <line x1="3" y1="18" x2="3.01" y2="18"></line>
+                </svg>
+                查看列表
+            </a>
+        </nav>
+
+        <!-- 意见列表卡片 -->
+        <main class="glass-card">
+            <h2 style="margin-bottom: 16px; font-size: 1.3rem; font-weight: 600;">意见反馈列表</h2>
+
+            <!-- 统计信息 -->
+            <div class="stats-bar" th:if="${feedbackList != null and !feedbackList.isEmpty()}">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 18px; height: 18px;">
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                </svg>
+                <span>共收到 <strong th:text="${feedbackList.size()}">0</strong> 条意见反馈</span>
+            </div>
+
+            <!-- 意见列表：使用 th:each 遍历 -->
+            <ul class="feedback-list" th:if="${feedbackList != null and !feedbackList.isEmpty()}">
+                <li class="feedback-item" th:each="feedback : ${feedbackList}">
+                    <div class="feedback-item-header">
+                        <span class="feedback-username">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                            <span th:text="${feedback.username}">用户名</span>
+                        </span>
+                        <span class="feedback-time" th:text="${#temporals.format(feedback.createTime, 'yyyy-MM-dd HH:mm:ss')}">提交时间</span>
+                    </div>
+                    <p class="feedback-content" th:text="${feedback.content}">意见内容</p>
+                </li>
+            </ul>
+
+            <!-- 空状态 -->
+            <div class="empty-state" th:if="${feedbackList == null or feedbackList.isEmpty()}">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                </svg>
+                <p>暂无意见反馈，请先提交一条意见</p>
+            </div>
+
+            <!-- 返回提交按钮 -->
+            <div class="form-actions">
+                <a th:href="@{/submit}" class="btn btn-primary">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    提交新意见
+                </a>
+            </div>
+        </main>
+
+        <!-- 页脚：显示作者信息 -->
+        <footer class="page-footer">
+            <div class="footer-info">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+                <span>作者：<strong th:text="${studentId}">liem</strong></span>
+            </div>
+        </footer>
+    </div>
+</body>
+</html>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>意见提交 - 企业内部意见反馈系统</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <div class="app-container">
+        <!-- 页面头部 -->
+        <header class="page-header">
+            <h1>企业内部意见反馈系统</h1>
+            <p>提交您的意见和建议，帮助我们持续改进</p>
+        </header>
+
+        <!-- 导航栏 -->
+        <nav class="nav-bar">
+            <a th:href="@{/submit}" class="nav-link active">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 19l7-7 3 3-7 7-3-3z"></path>
+                    <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path>
+                    <path d="M2 2l7.586 7.586"></path>
+                    <circle cx="11" cy="11" r="2"></circle>
+                </svg>
+                提交意见
+            </a>
+            <a th:href="@{/list}" class="nav-link">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="8" y1="6" x2="21" y2="6"></line>
+                    <line x1="8" y1="12" x2="21" y2="12"></line>
+                    <line x1="8" y1="18" x2="21" y2="18"></line>
+                    <line x1="3" y1="6" x2="3.01" y2="6"></line>
+                    <line x1="3" y1="12" x2="3.01" y2="12"></line>
+                    <line x1="3" y1="18" x2="3.01" y2="18"></line>
+                </svg>
+                查看列表
+            </a>
+        </nav>
+
+        <!-- 表单卡片 -->
+        <main class="glass-card">
+            <h2 style="margin-bottom: 24px; font-size: 1.3rem; font-weight: 600;">填写意见反馈</h2>
+
+            <!-- 意见提交表单：使用 th:action, th:object, th:field -->
+            <form th:action="@{/submit}" th:object="${feedback}" method="post">
+                <!-- 用户名输入 -->
+                <div class="form-section">
+                    <label for="username" class="form-label">
+                        提交人姓名
+                        <span class="required">*</span>
+                    </label>
+                    <input type="text"
+                           id="username"
+                           th:field="*{username}"
+                           class="form-input"
+                           placeholder="请输入您的姓名"
+                           required
+                           maxlength="50">
+                </div>
+
+                <!-- 意见内容输入 -->
+                <div class="form-section">
+                    <label for="content" class="form-label">
+                        意见内容
+                        <span class="required">*</span>
+                    </label>
+                    <textarea id="content"
+                              th:field="*{content}"
+                              class="form-textarea"
+                              placeholder="请输入您的意见和建议..."
+                              required></textarea>
+                </div>
+
+                <!-- 表单操作按钮 -->
+                <div class="form-actions">
+                    <button type="reset" class="btn btn-secondary">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="1 4 1 10 7 10"></polyline>
+                            <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+                        </svg>
+                        重置
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="22" y1="2" x2="11" y2="13"></line>
+                            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                        </svg>
+                        提交意见
+                    </button>
+                </div>
+            </form>
+        </main>
+
+        <!-- 页脚：显示作者信息 -->
+        <footer class="page-footer">
+            <div class="footer-info">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+                <span>作者：<strong th:text="${studentId}">liem</strong></span>
+            </div>
+        </footer>
+    </div>
+</body>
+</html>
