@@ -1,106 +1,131 @@
 <p align="center">
-  <img src="./assets/readme/hero.svg" width="100%" alt="enterprise-feedback-system 企业内部意见反馈系统,基于 SpringBoot + Redis + RabbitMQ">
+  <img src="assets/readme/hero.svg" alt="企业内部意见反馈系统 - 三链路并行架构:一次提交触发 MySQL 持久化、Redis 缓存、RabbitMQ 消息" width="100%"/>
 </p>
 
-# 企业内部意见反馈系统
+## Proof · 三链路并行证据
 
-一个让员工提交意见、让管理员查看全部意见的企业内部反馈系统。意见先写入 MySQL，再由 RabbitMQ 异步派发到通知消费者；列表查询走 Redis 缓存，第二次访问直接命中缓存、不再查库。
+一次 `POST /submit`,在 `FeedbackServiceImpl.save` 内并行触发三条链路。下方示意图为代码级证据,所有类名、方法名、缓存键、交换器与队列名均与源码一致。
 
-## 核心机制
+<p align="center">
+  <img src="assets/readme/section-mechanism.svg" alt="核心机制:FeedbackController.submit → FeedbackServiceImpl.save → MySQL insert / Redis @Cacheable / RabbitMQ Fanout" width="100%"/>
+</p>
 
-一次意见提交会同时触发三条链路：
+### 真实类名表
 
-- **持久化**：意见写入 MySQL `feedback` 表，MyBatis-Plus 单表 CRUD
-- **缓存**：`/list` 接口标注 `@Cacheable("feedbackList")`，首次查库后写入 Redis，后续直接命中
-- **消息**：保存后通过 `RabbitTemplate` 把 JSON 消息发往 `feedback.exchange`（Fanout），消费者 `@RabbitListener` 监听 `feedback.queue` 在控制台打印通知
+| 链路 | 类 / 配置 | 关键代码 |
+| --- | --- | --- |
+| 持久化 | `Feedback` `FeedbackMapper` `FeedbackServiceImpl` | `@TableName("feedback")` `@TableId` `@TableField` / `extends BaseMapper<Feedback>` |
+| 缓存 | `FinalExamApplication` `RedisConfig` `FeedbackController` | `@EnableCaching` / `Jackson2JsonRedisSerializer` / `@Cacheable("feedbackList")` |
+| 消息 | `RabbitMQConfig` `FeedbackNoticeConsumer` | `feedback.exchange` (Fanout) + `feedback.queue` 绑定 / `@RabbitListener` |
 
-## 功能与技术点
+### 运行时证据(缓存键 / 交换器 / 队列名)
 
-| 模块 | 实现要点 |
-|------|----------|
-| 数据存取 | `Feedback` 实体用 `@TableName/@TableId/@TableField` 映射；`FeedbackMapper` 继承 `BaseMapper` |
-| 视图层 | Thymeleaf `th:action/th:object/th:field` 表单提交；`th:each` 遍历列表；玻璃化 UI、SVG 图标、响应式 |
-| Redis 缓存 | 主启动类 `@EnableCaching`；`RedisConfig` 用 `Jackson2JsonRedisSerializer`；缓存键 `feedbackList::SimpleKey []` |
-| RabbitMQ | `RabbitMQConfig` 声明 Fanout 交换器 + 队列绑定；`FeedbackNoticeConsumer` 监听消费 |
+- 缓存键:`feedbackList::SimpleKey []`(空参 SimpleKey,首次查库后写入 Redis)
+- 交换器:`feedback.exchange`(Fanout 类型,广播到所有绑定队列)
+- 队列:`feedback.queue`(由 `RabbitMQConfig` 声明并与交换器绑定)
+- 消费者:`FeedbackNoticeConsumer` 通过 `@RabbitListener` 监听,收到消息后在控制台打印
 
-## 技术栈
+## What it is
 
-| 技术 | 版本 | 用途 |
-|------|------|------|
-| Spring Boot | 2.7.18 | 基础框架 |
-| MyBatis-Plus | 3.5.5 | ORM |
-| Thymeleaf | 3.x | 模板引擎 |
-| Redis | - | 缓存 |
-| RabbitMQ | - | 消息队列 |
-| MySQL | 9.4.0 | 数据库 |
-| Java | 11 | 开发语言 |
+企业内部反馈系统:员工通过 `/submit` 提交意见,管理员通过 `/list` 查看全部意见。一次提交并行触发 MySQL 持久化、Redis 缓存、RabbitMQ 异步通知三条链路。
 
-## 项目结构
+## Why different
+
+不是单库 CRUD。`POST /submit` 在一次请求内完成三件事,分别由独立组件承担:
+
+- **MySQL 持久化** — `Feedback` 实体映射 `feedback` 表,`FeedbackMapper extends BaseMapper` 完成单表 CRUD,`feedbackMapper.insert(feedback)` 落库
+- **Redis 缓存** — `/list` 接口标注 `@Cacheable("feedbackList")`,首次查库后写 Redis,第二次访问直接命中缓存,不再执行 SQL
+- **RabbitMQ 消息** — 保存后 `RabbitTemplate` 把 JSON 消息发往 `feedback.exchange`(Fanout),`@RabbitListener` 监听 `feedback.queue` 异步消费,在控制台打印通知
+
+三条链路并行,互不阻塞:用户提交即时返回,缓存命中率可观测,通知消费解耦。
+
+## How it works
 
 ```
-enterprise-feedback-system/
-├── pom.xml
-├── sql/init.sql
-└── src/main/
-    ├── java/com/liem/feedback/
-    │   ├── FinalExamApplication.java      # @EnableCaching 主启动类
-    │   ├── entity/Feedback.java
-    │   ├── mapper/FeedbackMapper.java      # BaseMapper<Feedback>
-    │   ├── service/{FeedbackService, impl/FeedbackServiceImpl}
-    │   ├── controller/FeedbackController.java
-    │   ├── config/{RedisConfig, RabbitMQConfig}
-    │   └── consumer/FeedbackNoticeConsumer.java
-    └── resources/
-        ├── application.properties
-        ├── templates/{submit.html, list.html}
-        └── static/css/style.css
+POST /submit (FeedbackController.submit)
+  └─ FeedbackServiceImpl.save(feedback)
+       ├─ feedbackMapper.insert(feedback)              // MySQL 持久化
+       ├─ (后续 GET /list 首次访问)
+       │    └─ @Cacheable("feedbackList") 未命中 → 查库 → 写 Redis
+       │                                          (键 feedbackList::SimpleKey [])
+       └─ rabbitTemplate.convertAndSend(...)           // RabbitMQ Fanout
+            └─ feedback.exchange → feedback.queue
+                 └─ FeedbackNoticeConsumer.@RabbitListener  // 控制台打印通知
 ```
 
-## 快速开始
+- `GET /list` 标注 `@Cacheable("feedbackList")`:首次查库并写入 Redis,后续请求命中缓存,日志中不再出现 `Preparing: SELECT`
+- `RabbitMQConfig` 显式声明 `feedback.exchange`(Fanout)+ `feedback.queue` 并完成绑定,确保交换器与队列在启动时自动创建
+- `FeedbackNoticeConsumer` 使用 `@RabbitListener` 监听 `feedback.queue`,消费时反序列化 JSON 并在控制台输出
+- 视图层使用 Thymeleaf:`th:action` / `th:object` / `th:field` 渲染表单,`th:each` 遍历列表,玻璃化 UI + SVG 图标 + 响应式布局
 
-**环境**：JDK 11+ · Maven 3.6+ · MySQL 8.0+ · Redis · RabbitMQ
+## How to use
 
-1. 初始化数据库
-   ```sql
-   CREATE DATABASE feedback_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-   USE feedback_db;
-   CREATE TABLE feedback (
-       id INT NOT NULL AUTO_INCREMENT,
-       username VARCHAR(50) NOT NULL,
-       content TEXT NOT NULL,
-       create_time DATETIME NOT NULL,
-       PRIMARY KEY (id)
-   ) ENGINE=InnoDB CHARACTER SET utf8mb4 COLLATE=utf8mb4_unicode_ci;
-   ```
-2. 修改 `src/main/resources/application.properties` 中的 MySQL / Redis / RabbitMQ 连接信息
-3. 启动
-   ```bash
-   mvn spring-boot:run
-   ```
-4. 访问
-   - 意见提交：http://localhost:8080/submit
-   - 意见列表：http://localhost:8080/list
+### 环境要求
+
+- JDK 11+
+- Maven 3.6+
+- MySQL 8.0+(开发环境使用 9.4.0)
+- Redis(任意稳定版本)
+- RabbitMQ(任意稳定版本)
+
+### 建库建表
+
+执行仓库内的 `sql/init.sql`:
+
+```sql
+CREATE DATABASE IF NOT EXISTS feedback_db DEFAULT CHARSET utf8mb4;
+USE feedback_db;
+-- feedback 表结构与初始化数据见 sql/init.sql
+```
+
+### 修改配置
+
+编辑 `src/main/resources/application.properties`:
+
+```properties
+# MySQL
+spring.datasource.url=jdbc:mysql://localhost:3306/feedback_db?useSSL=false&serverTimezone=Asia/Shanghai
+spring.datasource.username=root
+spring.datasource.password=你的密码
+
+# Redis
+spring.redis.host=localhost
+spring.redis.port=6379
+
+# RabbitMQ
+spring.rabbitmq.host=localhost
+spring.rabbitmq.port=5672
+spring.rabbitmq.username=guest
+spring.rabbitmq.password=guest
+```
+
+### 启动
+
+```bash
+mvn spring-boot:run
+```
+
+访问:
+
+- 提交意见:`http://localhost:8080/submit`
+- 查看列表:`http://localhost:8080/list`
 
 ## 缓存与消息验证
 
-- 第一次访问 `/list`：查询数据库，结果写入 Redis（键 `feedbackList::SimpleKey []`）
-- 第二次访问 `/list`：直接从 Redis 读取，不执行 SQL
-- 提交意见后：控制台输出消费者收到的消息（含 username、content、createTime）
+### Redis 缓存命中验证
+
+1. 首次访问 `GET /list`:控制台日志可见 MyBatis 执行 SQL(`Preparing: SELECT ...`),随后 Redis 写入键 `feedbackList::SimpleKey []`
+2. 第二次访问 `GET /list`:日志中不再出现 SQL,直接从 Redis 读取,响应显著加快
+
+### RabbitMQ 消息验证
+
+提交一条意见后,控制台立即输出 `FeedbackNoticeConsumer` 收到的消息(JSON 内容,含意见字段),证明 Fanout 交换器与队列绑定生效、异步消费链路打通。
 
 ## 测试数据
 
-| id | username | content |
-|----|----------|---------|
-| 1 | liem liem | 希望公司能增加下午茶供应，提升员工幸福感。 |
-| 2 | liem | 建议优化内部审批流程，减少不必要的环节。 |
-| 3 | liem | 办公环境整体不错，但希望会议室预约系统能更便捷。 |
-
-## 个性化标识
-
-- 项目命名：`enterprise-feedback-system`
-- 所有前端页面底部显示「作者：liem」
-- 数据库与日志中包含作者标识 `liem`
+`sql/init.sql` 内置 3 条 liem 的意见数据,启动后可直接在 `/list` 页面看到,无需手动构造。
 
 ---
 
-<p align="center"><sub>作者 liem · 企业内部意见反馈系统</sub></p>
+作者:**liem** · Spring Boot 2.7.18 · MyBatis-Plus 3.5.5 · Java 11
+所有前端页面底部显示"作者:liem",数据库与日志中含 liem 标识。

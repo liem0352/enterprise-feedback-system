@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 140" width="100%" role="img" aria-labelledby="m-title m-desc">
+  <title id="m-title">核心机制 - 提交链路的代码级证据</title>
+  <desc id="m-desc">FeedbackController 接收提交,FeedbackServiceImpl.save 一次调用并行触发 MySQL insert、Redis 缓存写入、RabbitMQ Fanout 发送</desc>
+
+  <defs>
+    <marker id="m-arrow-call" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#6B7280"/>
+    </marker>
+    <marker id="m-arrow-mysql" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#E8E4D9"/>
+    </marker>
+    <marker id="m-arrow-redis" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#4A9EFF"/>
+    </marker>
+    <marker id="m-arrow-rabbit" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#6BBE7A"/>
+    </marker>
+  </defs>
+
+  <rect width="1200" height="140" rx="10" fill="#0F1419"/>
+
+  <g transform="translate(48 48)">
+    <rect width="240" height="44" rx="10" fill="none" stroke="#C97064" stroke-width="1.5"/>
+    <text x="120" y="20" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" fill="#C97064" text-anchor="middle" font-weight="600">FeedbackController</text>
+    <text x="120" y="36" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10" fill="#6B7280" text-anchor="middle">.submit(feedback)</text>
+  </g>
+
+  <path d="M 288 70 L 354 70" stroke="#6B7280" stroke-width="1.25" fill="none" marker-end="url(#m-arrow-call)"/>
+
+  <g transform="translate(360 48)">
+    <rect width="280" height="44" rx="10" fill="none" stroke="#E8E4D9" stroke-width="1.5"/>
+    <text x="140" y="20" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" fill="#E8E4D9" text-anchor="middle" font-weight="600">FeedbackServiceImpl</text>
+    <text x="140" y="36" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10" fill="#6B7280" text-anchor="middle">.save(feedback)</text>
+  </g>
+
+  <path d="M 640 70 L 754 26" stroke="#E8E4D9" stroke-width="1.25" fill="none" marker-end="url(#m-arrow-mysql)"/>
+  <path d="M 640 70 L 754 70" stroke="#4A9EFF" stroke-width="1.25" fill="none" marker-end="url(#m-arrow-redis)"/>
+  <path d="M 640 70 L 754 114" stroke="#6BBE7A" stroke-width="1.25" fill="none" marker-end="url(#m-arrow-rabbit)"/>
+
+  <g transform="translate(760 8)">
+    <rect width="392" height="36" rx="10" fill="none" stroke="#E8E4D9" stroke-width="1.5"/>
+    <text x="196" y="16" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="12" fill="#E8E4D9" text-anchor="middle" font-weight="600">MySQL · feedbackMapper.insert()</text>
+    <text x="196" y="29" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10" fill="#6B7280" text-anchor="middle">@TableName("feedback") · BaseMapper</text>
+  </g>
+
+  <g transform="translate(760 52)">
+    <rect width="392" height="36" rx="10" fill="none" stroke="#4A9EFF" stroke-width="1.5"/>
+    <text x="196" y="16" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="12" fill="#4A9EFF" text-anchor="middle" font-weight="600">Redis · @Cacheable("feedbackList")</text>
+    <text x="196" y="29" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10" fill="#6B7280" text-anchor="middle">feedbackList::SimpleKey []</text>
+  </g>
+
+  <g transform="translate(760 96)">
+    <rect width="392" height="36" rx="10" fill="none" stroke="#6BBE7A" stroke-width="1.5"/>
+    <text x="196" y="16" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="12" fill="#6BBE7A" text-anchor="middle" font-weight="600">RabbitMQ · rabbitTemplate.convertAndSend()</text>
+    <text x="196" y="29" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10" fill="#6B7280" text-anchor="middle">feedback.exchange (Fanout) → feedback.queue</text>
+  </g>
+</svg>
