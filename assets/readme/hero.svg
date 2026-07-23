@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="340" viewBox="0 0 1200 340" role="img" aria-labelledby="t d">
+  <title id="t">enterprise-feedback-system · 企业内部意见反馈系统</title>
+  <desc id="d">基于 SpringBoot + MyBatis-Plus + Redis 缓存 + RabbitMQ 消息队列的企业意见反馈系统,左侧标题与技术栈,右侧展示意见提交到消息消费的流转链路。</desc>
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#f59e0b"/>
+    </marker>
+    <marker id="ag" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#5e6b66"/>
+    </marker>
+  </defs>
+  <rect width="1200" height="340" rx="22" fill="#0a1410"/>
+  <rect x="0" y="0" width="6" height="340" rx="3" fill="#34d399"/>
+
+  <g transform="translate(56,54)" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC',sans-serif">
+    <text x="0" y="0" font-size="15" letter-spacing="4" fill="#34d399" font-weight="600">ENTERPRISE · FEEDBACK SYSTEM</text>
+    <text x="0" y="52" font-size="40" font-weight="700" fill="#eaf2ee">企业内部意见反馈系统</text>
+    <text x="0" y="96" font-size="17" fill="#a9b8b2">SpringBoot + Redis 缓存 + RabbitMQ 消息队列</text>
+    <text x="0" y="122" font-size="17" fill="#a9b8b2">员工提交意见 · 缓存加速读取 · 消息异步通知</text>
+
+    <g transform="translate(0,160)" font-size="13.5" font-family="ui-monospace,SFMono-Regular,Menlo,monospace">
+      <g><rect x="0" y="0" width="96" height="30" rx="8" fill="none" stroke="#2a3a34"/><text x="48" y="20" text-anchor="middle" fill="#cdd8d2">SpringBoot 2.7</text></g>
+      <g transform="translate(108,0)"><rect width="116" height="30" rx="8" fill="none" stroke="#2a3a34"/><text x="58" y="20" text-anchor="middle" fill="#cdd8d2">MyBatis-Plus</text></g>
+      <g transform="translate(236,0)"><rect width="80" height="30" rx="8" fill="none" stroke="#1f6f5c"/><text x="40" y="20" text-anchor="middle" fill="#34d399">Redis</text></g>
+      <g transform="translate(328,0)"><rect width="104" height="30" rx="8" fill="none" stroke="#7a5217"/><text x="52" y="20" text-anchor="middle" fill="#f59e0b">RabbitMQ</text></g>
+      <g transform="translate(444,0)"><rect width="76" height="30" rx="8" fill="none" stroke="#2a3a34"/><text x="38" y="20" text-anchor="middle" fill="#cdd8d2">Thymeleaf</text></g>
+    </g>
+    <text x="0" y="236" font-size="13" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" fill="#6b7873">Java 11 · MySQL 9.4 · @EnableCaching · @RabbitListener</text>
+  </g>
+
+  <g transform="translate(712,70)" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC',sans-serif">
+    <text x="0" y="0" font-size="12" letter-spacing="3" fill="#5e6b66">MESSAGE FLOW</text>
+
+    <g transform="translate(0,22)">
+      <rect width="160" height="46" rx="9" fill="#11201b" stroke="#2a3a34"/>
+      <text x="80" y="22" text-anchor="middle" font-size="13.5" fill="#eaf2ee" font-weight="600">员工提交意见</text>
+      <text x="80" y="38" text-anchor="middle" font-size="11" fill="#7d8c86" font-family="ui-monospace,monospace">/submit</text>
+    </g>
+
+    <path d="M160,45 L188,45" stroke="#5e6b66" stroke-width="1.5" fill="none" marker-end="url(#ag)"/>
+
+    <g transform="translate(190,22)">
+      <rect width="150" height="46" rx="9" fill="#11201b" stroke="#2a3a34"/>
+      <text x="75" y="22" text-anchor="middle" font-size="13.5" fill="#eaf2ee" font-weight="600">MySQL 持久化</text>
+      <text x="75" y="38" text-anchor="middle" font-size="11" fill="#7d8c86" font-family="ui-monospace,monospace">feedback 表</text>
+    </g>
+
+    <path d="M340,45 L368,45" stroke="#f59e0b" stroke-width="1.6" fill="none" marker-end="url(#ar)"/>
+
+    <g transform="translate(370,22)">
+      <rect width="150" height="46" rx="9" fill="#1c1408" stroke="#7a5217"/>
+      <text x="75" y="22" text-anchor="middle" font-size="13.5" fill="#f59e0b" font-weight="600">Exchange 扇出</text>
+      <text x="75" y="38" text-anchor="middle" font-size="11" fill="#9c7438" font-family="ui-monospace,monospace">feedback.exchange</text>
+    </g>
+
+    <g transform="translate(0,98)">
+      <rect width="150" height="46" rx="9" fill="#0d241d" stroke="#1f6f5c"/>
+      <text x="75" y="22" text-anchor="middle" font-size="13.5" fill="#34d399" font-weight="600">Redis 缓存</text>
+      <text x="75" y="38" text-anchor="middle" font-size="11" fill="#3a8a72" font-family="ui-monospace,monospace">@Cacheable</text>
+    </g>
+
+    <path d="M75,144 L75,172" stroke="#5e6b66" stroke-width="1.5" fill="none" marker-end="url(#ag)"/>
+    <path d="M445,68 L445,110 L150,172" stroke="#f59e0b" stroke-width="1.5" fill="none" marker-end="url(#ar)"/>
+
+    <g transform="translate(190,176)">
+      <rect width="150" height="46" rx="9" fill="#1c1408" stroke="#7a5217"/>
+      <text x="75" y="22" text-anchor="middle" font-size="13.5" fill="#f59e0b" font-weight="600">feedback.queue</text>
+      <text x="75" y="38" text-anchor="middle" font-size="11" fill="#9c7438" font-family="ui-monospace,monospace">队列绑定</text>
+    </g>
+
+    <path d="M340,199 L368,199" stroke="#f59e0b" stroke-width="1.6" fill="none" marker-end="url(#ar)"/>
+
+    <g transform="translate(370,176)">
+      <rect width="150" height="46" rx="9" fill="#11201b" stroke="#2a3a34"/>
+      <text x="75" y="22" text-anchor="middle" font-size="13.5" fill="#eaf2ee" font-weight="600">消费者监听</text>
+      <text x="75" y="38" text-anchor="middle" font-size="11" fill="#7d8c86" font-family="ui-monospace,monospace">@RabbitListener</text>
+    </g>
+  </g>
+
+  <text x="56" y="312" font-size="12" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" fill="#5e6b66">author: liem · /submit → /list · Glassmorphism UI · WCAG AA</text>
+</svg>
