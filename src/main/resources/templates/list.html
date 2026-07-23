@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,7 +14,6 @@
             <h1>企业内部意见反馈系统</h1>
             <p>查看所有已提交的意见和建议</p>
         </header>
-
         <!-- 导航栏 -->
         <nav class="nav-bar">
             <a th:href="@{/submit}" class="nav-link">
@@ -36,12 +36,21 @@
                 </svg>
                 查看列表
             </a>
+            <!-- 登出表单：仅对已认证用户显示 -->
+            <form sec:authorize="isAuthenticated()" th:action="@{/logout}" method="post" style="display: inline; margin-left: auto;">
+                <button type="submit" class="nav-link" style="background: transparent; border: none; cursor: pointer; color: inherit; font: inherit;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                        <polyline points="16 17 21 12 16 7"></polyline>
+                        <line x1="21" y1="12" x2="9" y2="12"></line>
+                    </svg>
+                    登出
+                </button>
+            </form>
         </nav>
-
         <!-- 意见列表卡片 -->
         <main class="glass-card">
             <h2 style="margin-bottom: 16px; font-size: 1.3rem; font-weight: 600;">意见反馈列表</h2>
-
             <!-- 统计信息 -->
             <div class="stats-bar" th:if="${feedbackList != null and !feedbackList.isEmpty()}">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 18px; height: 18px;">
@@ -49,7 +58,6 @@
                 </svg>
                 <span>共收到 <strong th:text="${feedbackList.size()}">0</strong> 条意见反馈</span>
             </div>
-
             <!-- 意见列表：使用 th:each 遍历 -->
             <ul class="feedback-list" th:if="${feedbackList != null and !feedbackList.isEmpty()}">
                 <li class="feedback-item" th:each="feedback : ${feedbackList}">
@@ -66,7 +74,6 @@
                     <p class="feedback-content" th:text="${feedback.content}">意见内容</p>
                 </li>
             </ul>
-
             <!-- 空状态 -->
             <div class="empty-state" th:if="${feedbackList == null or feedbackList.isEmpty()}">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
@@ -74,7 +81,6 @@
                 </svg>
                 <p>暂无意见反馈，请先提交一条意见</p>
             </div>
-
             <!-- 返回提交按钮 -->
             <div class="form-actions">
                 <a th:href="@{/submit}" class="btn btn-primary">
@@ -86,7 +92,6 @@
                 </a>
             </div>
         </main>
-
         <!-- 页脚：显示作者信息 -->
         <footer class="page-footer">
             <div class="footer-info">

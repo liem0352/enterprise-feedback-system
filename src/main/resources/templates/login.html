@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录 - 企业内部意见反馈系统</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <style>
+        /* 登录页专属样式 - Glassmorphism 玻璃态设计 */
+        .login-container {
+            max-width: 420px;
+            margin: 60px auto;
+            padding: 40px 32px;
+        }
+        .login-title {
+            text-align: center;
+            margin-bottom: 8px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary, #1d1d1f);
+        }
+        .login-subtitle {
+            text-align: center;
+            margin-bottom: 32px;
+            font-size: 0.95rem;
+            color: var(--text-secondary, #6e6e73);
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-primary, #1d1d1f);
+        }
+        .form-group input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid rgba(60, 60, 67, 0.12);
+            border-radius: 12px;
+            font-size: 1rem;
+            background: rgba(255, 255, 255, 0.6);
+            transition: border-color 0.2s, box-shadow 0.2s;
+            box-sizing: border-box;
+        }
+        .form-group input:focus {
+            outline: none;
+            border-color: #0071e3;
+            box-shadow: 0 0 0 4px rgba(0, 113, 227, 0.1);
+        }
+        .login-btn {
+            width: 100%;
+            padding: 12px 16px;
+            background: #0071e3;
+            color: #ffffff;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+            margin-top: 8px;
+        }
+        .login-btn:hover {
+            background: #0077ed;
+        }
+        .login-btn:active {
+            transform: scale(0.98);
+        }
+        .alert {
+            padding: 12px 16px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+        .alert-error {
+            background: rgba(255, 59, 48, 0.1);
+            color: #ff3b30;
+            border: 1px solid rgba(255, 59, 48, 0.2);
+        }
+        .alert-success {
+            background: rgba(52, 199, 89, 0.1);
+            color: #34c759;
+            border: 1px solid rgba(52, 199, 89, 0.2);
+        }
+        .login-hint {
+            margin-top: 24px;
+            padding: 12px 16px;
+            background: rgba(0, 113, 227, 0.06);
+            border-radius: 12px;
+            font-size: 0.85rem;
+            color: #6e6e73;
+            text-align: center;
+        }
+        .login-hint strong {
+            color: #1d1d1f;
+        }
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #0071e3;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container glass-card">
+        <h1 class="login-title">管理员登录</h1>
+        <p class="login-subtitle">企业内部意见反馈系统</p>
+
+        <!-- 登录失败提示 -->
+        <div class="alert alert-error" th:if="${param.error}">
+            <span>用户名或密码错误，请重试</span>
+        </div>
+
+        <!-- 登出成功提示 -->
+        <div class="alert alert-success" th:if="${param.logout}">
+            <span>已安全登出，请重新登录</span>
+        </div>
+
+        <!-- 登录表单：POST 提交到 /login 由 Spring Security 处理 -->
+        <form th:action="@{/login}" method="post">
+            <div class="form-group">
+                <label for="username">用户名</label>
+                <input type="text" id="username" name="username"
+                       placeholder="请输入用户名" required autofocus>
+            </div>
+            <div class="form-group">
+                <label for="password">密码</label>
+                <input type="password" id="password" name="password"
+                       placeholder="请输入密码" required>
+            </div>
+            <button type="submit" class="login-btn">登录</button>
+        </form>
+
+        <!-- 默认账号提示（生产环境请删除此提示） -->
+        <div class="login-hint">
+            默认管理员账号：<strong>admin</strong> / <strong>admin123</strong>
+        </div>
+
+        <a th:href="@{/submit}" class="back-link">返回提交意见页</a>
+    </div>
+</body>
+</html>
