@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 320" width="100%" role="img" aria-labelledby="fl-title fl-desc">
+  <title id="fl-title">反馈数据生命周期 - 从提交到异步消费的完整路径</title>
+  <desc id="fl-desc">一条意见从用户提交,经 MySQL 落库、Redis 缓存写入,到 RabbitMQ 异步消费通知的完整生命周期</desc>
+
+  <defs>
+    <marker id="fl-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#6B7280"/>
+    </marker>
+  </defs>
+
+  <rect width="1200" height="320" rx="18" fill="#0F1419"/>
+
+  <g id="fl-header">
+    <text x="56" y="56" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="26" font-weight="700" fill="#E8E4D9">反馈数据生命周期</text>
+    <text x="56" y="80" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" fill="#8A93A0">一条意见从提交到异步消费的完整路径</text>
+  </g>
+
+  <path d="M 296 200 L 337 200" stroke="#6B7280" stroke-width="1.25" fill="none" marker-end="url(#fl-arrow)"/>
+  <path d="M 581 200 L 622 200" stroke="#6B7280" stroke-width="1.25" fill="none" marker-end="url(#fl-arrow)"/>
+  <path d="M 866 200 L 907 200" stroke="#6B7280" stroke-width="1.25" fill="none" marker-end="url(#fl-arrow)"/>
+
+  <g id="fl-stage-1">
+    <rect x="56" y="140" width="240" height="3" fill="#C97064"/>
+    <rect x="56" y="143" width="240" height="117" rx="10" fill="#161C24" stroke="#2A2F36" stroke-width="1"/>
+    <text x="176" y="174" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="17" font-weight="700" fill="#C97064" text-anchor="middle">用户提交</text>
+    <line x1="76" y1="190" x2="276" y2="190" stroke="#2A2F36" stroke-width="1"/>
+    <text x="176" y="214" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="12" fill="#E8E4D9" text-anchor="middle" font-weight="600">POST /submit</text>
+    <text x="176" y="234" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" fill="#8A93A0" text-anchor="middle">FeedbackController</text>
+    <text x="176" y="252" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10" fill="#6B7280" text-anchor="middle">.submit(feedback)</text>
+  </g>
+
+  <g id="fl-stage-2">
+    <rect x="341" y="140" width="240" height="3" fill="#E8E4D9"/>
+    <rect x="341" y="143" width="240" height="117" rx="10" fill="#161C24" stroke="#2A2F36" stroke-width="1"/>
+    <text x="461" y="174" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="17" font-weight="700" fill="#E8E4D9" text-anchor="middle">MySQL 落库</text>
+    <line x1="361" y1="190" x2="561" y2="190" stroke="#2A2F36" stroke-width="1"/>
+    <text x="461" y="214" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="12" fill="#E8E4D9" text-anchor="middle" font-weight="600">feedbackMapper.insert</text>
+    <text x="461" y="234" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" fill="#8A93A0" text-anchor="middle">feedback 表</text>
+    <text x="461" y="252" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10" fill="#6B7280" text-anchor="middle">@TableName</text>
+  </g>
+
+  <g id="fl-stage-3">
+    <rect x="626" y="140" width="240" height="3" fill="#4A9EFF"/>
+    <rect x="626" y="143" width="240" height="117" rx="10" fill="#161C24" stroke="#2A2F36" stroke-width="1"/>
+    <text x="746" y="174" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="17" font-weight="700" fill="#4A9EFF" text-anchor="middle">Redis 缓存</text>
+    <line x1="646" y1="190" x2="846" y2="190" stroke="#2A2F36" stroke-width="1"/>
+    <text x="746" y="214" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="12" fill="#4A9EFF" text-anchor="middle" font-weight="600">GET /list 首次</text>
+    <text x="746" y="234" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" fill="#8A93A0" text-anchor="middle">@Cacheable 写入</text>
+    <text x="746" y="252" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10" fill="#6B7280" text-anchor="middle">SimpleKey []</text>
+  </g>
+
+  <g id="fl-stage-4">
+    <rect x="911" y="140" width="240" height="3" fill="#6BBE7A"/>
+    <rect x="911" y="143" width="240" height="117" rx="10" fill="#161C24" stroke="#2A2F36" stroke-width="1"/>
+    <text x="1031" y="174" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="17" font-weight="700" fill="#6BBE7A" text-anchor="middle">RabbitMQ 消费</text>
+    <line x1="931" y1="190" x2="1131" y2="190" stroke="#2A2F36" stroke-width="1"/>
+    <text x="1031" y="214" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="12" fill="#6BBE7A" text-anchor="middle" font-weight="600">FeedbackNoticeConsumer</text>
+    <text x="1031" y="234" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" fill="#8A93A0" text-anchor="middle">@RabbitListener</text>
+    <text x="1031" y="252" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10" fill="#6B7280" text-anchor="middle">控制台打印</text>
+  </g>
+</svg>

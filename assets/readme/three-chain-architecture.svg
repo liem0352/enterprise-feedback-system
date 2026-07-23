@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 420" width="100%" role="img" aria-labelledby="arch-title arch-desc">
+  <title id="arch-title">三链路并行架构 - 持久化链、缓存链、通知链</title>
+  <desc id="arch-desc">FeedbackServiceImpl.save 一次调用并行触发三条链路:MySQL 持久化链、Redis 缓存链、RabbitMQ 通知链,互不阻塞</desc>
+
+  <defs>
+    <marker id="arch-arrow-fg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#E8E4D9"/>
+    </marker>
+    <marker id="arch-arrow-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#4A9EFF"/>
+    </marker>
+    <marker id="arch-arrow-green" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#6BBE7A"/>
+    </marker>
+    <marker id="arch-arrow-mute" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#6B7280"/>
+    </marker>
+  </defs>
+
+  <rect width="1200" height="420" rx="18" fill="#0F1419"/>
+
+  <g id="arch-header">
+    <text x="56" y="60" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="28" font-weight="700" fill="#E8E4D9">三链路并行架构</text>
+    <text x="56" y="86" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" fill="#8A93A0">一次 save() 调用,三条链路并行,互不阻塞</text>
+  </g>
+
+  <g id="arch-entry">
+    <rect x="400" y="108" width="400" height="56" rx="10" fill="none" stroke="#C97064" stroke-width="1.5"/>
+    <text x="600" y="134" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="15" fill="#C97064" text-anchor="middle" font-weight="600">FeedbackServiceImpl.save(feedback)</text>
+    <text x="600" y="154" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" fill="#6B7280" text-anchor="middle">一次调用,三链路并行触发</text>
+  </g>
+
+  <g id="arch-fork" fill="none" stroke-width="1.25">
+    <path d="M 600 164 L 224 208" stroke="#E8E4D9" marker-end="url(#arch-arrow-fg)"/>
+    <path d="M 600 164 L 600 208" stroke="#4A9EFF" marker-end="url(#arch-arrow-blue)"/>
+    <path d="M 600 164 L 976 208" stroke="#6BBE7A" marker-end="url(#arch-arrow-green)"/>
+  </g>
+
+  <g id="arch-lane-mysql">
+    <rect x="104" y="212" width="240" height="50" rx="8" fill="none" stroke="#E8E4D9" stroke-width="1.5"/>
+    <text x="224" y="234" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="14" fill="#E8E4D9" text-anchor="middle" font-weight="600">持久化链</text>
+    <text x="224" y="252" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" fill="#8A93A0" text-anchor="middle">feedbackMapper.insert()</text>
+    <path d="M 224 262 L 224 282" stroke="#6B7280" stroke-width="1.25" fill="none" marker-end="url(#arch-arrow-mute)"/>
+    <rect x="104" y="284" width="240" height="50" rx="8" fill="none" stroke="#E8E4D9" stroke-width="1.5"/>
+    <text x="224" y="306" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" fill="#E8E4D9" text-anchor="middle" font-weight="600">MySQL feedback 表</text>
+    <text x="224" y="324" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10" fill="#6B7280" text-anchor="middle">@TableName("feedback")</text>
+    <path d="M 224 334 L 224 354" stroke="#6B7280" stroke-width="1.25" fill="none" marker-end="url(#arch-arrow-mute)"/>
+    <rect x="104" y="356" width="240" height="50" rx="8" fill="none" stroke="#E8E4D9" stroke-width="1.5"/>
+    <text x="224" y="378" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" fill="#E8E4D9" text-anchor="middle" font-weight="600">BaseMapper&lt;Feedback&gt;</text>
+    <text x="224" y="396" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10" fill="#6B7280" text-anchor="middle">单表 CRUD 落库</text>
+  </g>
+
+  <g id="arch-lane-redis">
+    <rect x="480" y="212" width="240" height="50" rx="8" fill="none" stroke="#4A9EFF" stroke-width="1.5"/>
+    <text x="600" y="234" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="14" fill="#4A9EFF" text-anchor="middle" font-weight="600">缓存链</text>
+    <text x="600" y="252" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" fill="#8A93A0" text-anchor="middle">@Cacheable("feedbackList")</text>
+    <path d="M 600 262 L 600 282" stroke="#6B7280" stroke-width="1.25" fill="none" marker-end="url(#arch-arrow-mute)"/>
+    <rect x="480" y="284" width="240" height="50" rx="8" fill="none" stroke="#4A9EFF" stroke-width="1.5"/>
+    <text x="600" y="306" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" fill="#4A9EFF" text-anchor="middle" font-weight="600">首次未命中 → 查库</text>
+    <text x="600" y="324" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10" fill="#6B7280" text-anchor="middle">Preparing: SELECT</text>
+    <path d="M 600 334 L 600 354" stroke="#6B7280" stroke-width="1.25" fill="none" marker-end="url(#arch-arrow-mute)"/>
+    <rect x="480" y="356" width="240" height="50" rx="8" fill="none" stroke="#4A9EFF" stroke-width="1.5"/>
+    <text x="600" y="378" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" fill="#4A9EFF" text-anchor="middle" font-weight="600">写入 Redis 缓存</text>
+    <text x="600" y="396" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10" fill="#6B7280" text-anchor="middle">feedbackList::SimpleKey []</text>
+  </g>
+
+  <g id="arch-lane-rabbit">
+    <rect x="856" y="212" width="240" height="50" rx="8" fill="none" stroke="#6BBE7A" stroke-width="1.5"/>
+    <text x="976" y="234" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="14" fill="#6BBE7A" text-anchor="middle" font-weight="600">通知链</text>
+    <text x="976" y="252" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" fill="#8A93A0" text-anchor="middle">rabbitTemplate.convertAndSend</text>
+    <path d="M 976 262 L 976 282" stroke="#6B7280" stroke-width="1.25" fill="none" marker-end="url(#arch-arrow-mute)"/>
+    <rect x="856" y="284" width="240" height="50" rx="8" fill="none" stroke="#6BBE7A" stroke-width="1.5"/>
+    <text x="976" y="306" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" fill="#6BBE7A" text-anchor="middle" font-weight="600">feedback.exchange</text>
+    <text x="976" y="324" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10" fill="#6B7280" text-anchor="middle">Fanout 广播</text>
+    <path d="M 976 334 L 976 354" stroke="#6B7280" stroke-width="1.25" fill="none" marker-end="url(#arch-arrow-mute)"/>
+    <rect x="856" y="356" width="240" height="50" rx="8" fill="none" stroke="#6BBE7A" stroke-width="1.5"/>
+    <text x="976" y="378" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" fill="#6BBE7A" text-anchor="middle" font-weight="600">feedback.queue</text>
+    <text x="976" y="396" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10" fill="#6B7280" text-anchor="middle">@RabbitListener 打印</text>
+  </g>
+</svg>

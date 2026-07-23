@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 320" width="100%" role="img" aria-labelledby="bm-title bm-desc">
+  <title id="bm-title">业务域 - 五个功能面覆盖提交、查询、存储、缓存、通知</title>
+  <desc id="bm-desc">反馈提交、反馈列表、持久化层、缓存层、异步通知五个业务域,分别对应 Thymeleaf 表单、Thymeleaf 遍历、MySQL MyBatis-Plus、Redis @Cacheable、RabbitMQ Fanout 消费</desc>
+
+  <rect width="1200" height="320" rx="18" fill="#0F1419"/>
+
+  <g id="bm-header">
+    <text x="56" y="56" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="26" font-weight="700" fill="#E8E4D9">业务域</text>
+    <text x="56" y="80" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" fill="#8A93A0">五个功能面,覆盖提交、查询、存储、缓存、通知</text>
+  </g>
+
+  <g id="bm-card-1">
+    <rect x="48" y="110" width="200" height="3" fill="#C97064"/>
+    <rect x="48" y="113" width="200" height="167" rx="10" fill="#161C24" stroke="#2A2F36" stroke-width="1"/>
+    <text x="148" y="146" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="17" font-weight="700" fill="#E8E4D9" text-anchor="middle">反馈提交</text>
+    <line x1="68" y1="162" x2="228" y2="162" stroke="#2A2F36" stroke-width="1"/>
+    <text x="148" y="186" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" fill="#C97064" text-anchor="middle" font-weight="600">POST /submit</text>
+    <text x="148" y="208" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="12" fill="#8A93A0" text-anchor="middle">Thymeleaf 表单</text>
+    <text x="148" y="230" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" fill="#6B7280" text-anchor="middle">th:action</text>
+    <text x="148" y="252" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" fill="#6B7280" text-anchor="middle">th:object · th:field</text>
+  </g>
+
+  <g id="bm-card-2">
+    <rect x="274" y="110" width="200" height="3" fill="#C97064"/>
+    <rect x="274" y="113" width="200" height="167" rx="10" fill="#161C24" stroke="#2A2F36" stroke-width="1"/>
+    <text x="374" y="146" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="17" font-weight="700" fill="#E8E4D9" text-anchor="middle">反馈列表</text>
+    <line x1="294" y1="162" x2="454" y2="162" stroke="#2A2F36" stroke-width="1"/>
+    <text x="374" y="186" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" fill="#C97064" text-anchor="middle" font-weight="600">GET /list</text>
+    <text x="374" y="208" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="12" fill="#8A93A0" text-anchor="middle">Thymeleaf 遍历</text>
+    <text x="374" y="230" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" fill="#6B7280" text-anchor="middle">th:each</text>
+    <text x="374" y="252" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" fill="#6B7280" text-anchor="middle">响应式布局</text>
+  </g>
+
+  <g id="bm-card-3">
+    <rect x="500" y="110" width="200" height="3" fill="#E8E4D9"/>
+    <rect x="500" y="113" width="200" height="167" rx="10" fill="#161C24" stroke="#2A2F36" stroke-width="1"/>
+    <text x="600" y="146" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="17" font-weight="700" fill="#E8E4D9" text-anchor="middle">持久化层</text>
+    <line x1="520" y1="162" x2="680" y2="162" stroke="#2A2F36" stroke-width="1"/>
+    <text x="600" y="186" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" fill="#E8E4D9" text-anchor="middle" font-weight="600">MySQL</text>
+    <text x="600" y="208" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="12" fill="#8A93A0" text-anchor="middle">MyBatis-Plus</text>
+    <text x="600" y="230" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" fill="#6B7280" text-anchor="middle">FeedbackMapper</text>
+    <text x="600" y="252" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" fill="#6B7280" text-anchor="middle">BaseMapper</text>
+  </g>
+
+  <g id="bm-card-4">
+    <rect x="726" y="110" width="200" height="3" fill="#4A9EFF"/>
+    <rect x="726" y="113" width="200" height="167" rx="10" fill="#161C24" stroke="#2A2F36" stroke-width="1"/>
+    <text x="826" y="146" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="17" font-weight="700" fill="#E8E4D9" text-anchor="middle">缓存层</text>
+    <line x1="746" y1="162" x2="906" y2="162" stroke="#2A2F36" stroke-width="1"/>
+    <text x="826" y="186" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" fill="#4A9EFF" text-anchor="middle" font-weight="600">Redis</text>
+    <text x="826" y="208" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="12" fill="#8A93A0" text-anchor="middle">@Cacheable</text>
+    <text x="826" y="230" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" fill="#6B7280" text-anchor="middle">feedbackList</text>
+    <text x="826" y="252" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" fill="#6B7280" text-anchor="middle">SimpleKey []</text>
+  </g>
+
+  <g id="bm-card-5">
+    <rect x="952" y="110" width="200" height="3" fill="#6BBE7A"/>
+    <rect x="952" y="113" width="200" height="167" rx="10" fill="#161C24" stroke="#2A2F36" stroke-width="1"/>
+    <text x="1052" y="146" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="17" font-weight="700" fill="#E8E4D9" text-anchor="middle">异步通知</text>
+    <line x1="972" y1="162" x2="1132" y2="162" stroke="#2A2F36" stroke-width="1"/>
+    <text x="1052" y="186" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" fill="#6BBE7A" text-anchor="middle" font-weight="600">RabbitMQ</text>
+    <text x="1052" y="208" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="12" fill="#8A93A0" text-anchor="middle">Fanout exchange</text>
+    <text x="1052" y="230" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" fill="#6B7280" text-anchor="middle">feedback.queue</text>
+    <text x="1052" y="252" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" fill="#6B7280" text-anchor="middle">FeedbackNoticeConsumer</text>
+  </g>
+</svg>

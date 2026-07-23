@@ -1,56 +1,56 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 380" width="100%" role="img" aria-labelledby="hero-title hero-desc">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 360" width="100%" role="img" aria-labelledby="hero-title hero-desc">
   <title id="hero-title">企业内部意见反馈系统 - 三链路并行架构</title>
   <desc id="hero-desc">SpringBoot + MyBatis-Plus + Redis + RabbitMQ 企业反馈系统:一次意见提交触发 MySQL 持久化、Redis 缓存、RabbitMQ 消息三条并行链路</desc>
 
   <defs>
-    <marker id="hero-arrow-mysql" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+    <marker id="hero-arrow-fg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
       <path d="M0,0 L10,5 L0,10 z" fill="#E8E4D9"/>
     </marker>
-    <marker id="hero-arrow-redis" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+    <marker id="hero-arrow-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
       <path d="M0,0 L10,5 L0,10 z" fill="#4A9EFF"/>
     </marker>
-    <marker id="hero-arrow-rabbit" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+    <marker id="hero-arrow-green" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
       <path d="M0,0 L10,5 L0,10 z" fill="#6BBE7A"/>
     </marker>
   </defs>
 
-  <rect width="1200" height="380" rx="26" fill="#0F1419"/>
+  <rect width="1200" height="360" rx="26" fill="#0F1419"/>
 
-  <g transform="translate(56 36)">
-    <text x="544" y="22" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="14" fill="#C97064" text-anchor="middle" letter-spacing="2.4">SPRING BOOT · FEEDBACK SYSTEM</text>
-    <text x="544" y="76" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="44" font-weight="700" fill="#E8E4D9" text-anchor="middle">企业内部意见反馈系统</text>
-    <text x="544" y="108" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="18" fill="#6B7280" text-anchor="middle">SpringBoot · MyBatis-Plus · Redis · RabbitMQ</text>
+  <g id="hero-title-block">
+    <text x="600" y="58" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" fill="#C97064" text-anchor="middle" letter-spacing="2.6">SPRING BOOT · FEEDBACK SYSTEM</text>
+    <text x="600" y="104" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="44" font-weight="700" fill="#E8E4D9" text-anchor="middle">企业内部意见反馈系统</text>
+    <text x="600" y="130" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="16" fill="#8A93A0" text-anchor="middle">SpringBoot · MyBatis-Plus · Redis · RabbitMQ</text>
   </g>
 
-  <g transform="translate(56 160)">
-    <g transform="translate(444 0)">
-      <rect width="200" height="56" rx="10" fill="none" stroke="#C97064" stroke-width="1.5"/>
-      <text x="100" y="26" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="16" fill="#C97064" text-anchor="middle" font-weight="600">提交意见</text>
-      <text x="100" y="46" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" fill="#6B7280" text-anchor="middle">POST /submit</text>
-    </g>
-
-    <path d="M 544 56 L 190 124" stroke="#E8E4D9" stroke-width="1.25" fill="none" marker-end="url(#hero-arrow-mysql)"/>
-    <path d="M 544 56 L 544 124" stroke="#4A9EFF" stroke-width="1.25" fill="none" marker-end="url(#hero-arrow-redis)"/>
-    <path d="M 544 56 L 898 124" stroke="#6BBE7A" stroke-width="1.25" fill="none" marker-end="url(#hero-arrow-rabbit)"/>
-
-    <g transform="translate(80 130)">
-      <rect width="220" height="70" rx="10" fill="none" stroke="#E8E4D9" stroke-width="1.5"/>
-      <text x="110" y="32" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="14" fill="#E8E4D9" text-anchor="middle" font-weight="600">MySQL 持久化</text>
-      <text x="110" y="54" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10" fill="#6B7280" text-anchor="middle">feedback 表 · MyBatis-Plus</text>
-    </g>
-
-    <g transform="translate(434 130)">
-      <rect width="220" height="70" rx="10" fill="none" stroke="#4A9EFF" stroke-width="1.5"/>
-      <text x="110" y="32" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="14" fill="#4A9EFF" text-anchor="middle" font-weight="600">Redis 缓存</text>
-      <text x="110" y="54" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10" fill="#6B7280" text-anchor="middle">@Cacheable feedbackList</text>
-    </g>
-
-    <g transform="translate(788 130)">
-      <rect width="220" height="70" rx="10" fill="none" stroke="#6BBE7A" stroke-width="1.5"/>
-      <text x="110" y="32" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="14" fill="#6BBE7A" text-anchor="middle" font-weight="600">RabbitMQ 消息</text>
-      <text x="110" y="54" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10" fill="#6B7280" text-anchor="middle">Fanout exchange · queue</text>
-    </g>
+  <g id="hero-submit-node">
+    <rect x="500" y="156" width="200" height="56" rx="10" fill="none" stroke="#C97064" stroke-width="1.5"/>
+    <text x="600" y="182" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="16" fill="#C97064" text-anchor="middle" font-weight="600">提交意见</text>
+    <text x="600" y="202" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" fill="#6B7280" text-anchor="middle">POST /submit</text>
   </g>
 
-  <text x="600" y="372" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="12" fill="#6B7280" text-anchor="middle">作者 liem · Spring Boot 2.7 · Java 11</text>
+  <g id="hero-branches" fill="none" stroke-width="1.25">
+    <path d="M 600 212 L 224 238" stroke="#E8E4D9" marker-end="url(#hero-arrow-fg)"/>
+    <path d="M 600 212 L 600 238" stroke="#4A9EFF" marker-end="url(#hero-arrow-blue)"/>
+    <path d="M 600 212 L 976 238" stroke="#6BBE7A" marker-end="url(#hero-arrow-green)"/>
+  </g>
+
+  <g id="hero-chain-mysql">
+    <rect x="114" y="244" width="220" height="72" rx="10" fill="none" stroke="#E8E4D9" stroke-width="1.5"/>
+    <text x="224" y="274" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="15" fill="#E8E4D9" text-anchor="middle" font-weight="600">MySQL 持久化</text>
+    <text x="224" y="298" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" fill="#6B7280" text-anchor="middle">feedback 表 · MyBatis-Plus</text>
+  </g>
+
+  <g id="hero-chain-redis">
+    <rect x="490" y="244" width="220" height="72" rx="10" fill="none" stroke="#4A9EFF" stroke-width="1.5"/>
+    <text x="600" y="274" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="15" fill="#4A9EFF" text-anchor="middle" font-weight="600">Redis 缓存</text>
+    <text x="600" y="298" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" fill="#6B7280" text-anchor="middle">@Cacheable feedbackList</text>
+  </g>
+
+  <g id="hero-chain-rabbit">
+    <rect x="866" y="244" width="220" height="72" rx="10" fill="none" stroke="#6BBE7A" stroke-width="1.5"/>
+    <text x="976" y="274" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="15" fill="#6BBE7A" text-anchor="middle" font-weight="600">RabbitMQ 消息</text>
+    <text x="976" y="298" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" fill="#6B7280" text-anchor="middle">Fanout exchange · queue</text>
+  </g>
+
+  <text x="600" y="344" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="12" fill="#6B7280" text-anchor="middle">作者 liem · Spring Boot 2.7 · Java 11</text>
 </svg>

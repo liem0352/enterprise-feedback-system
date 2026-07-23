@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 320" width="100%" role="img" aria-labelledby="df-title df-desc">
+  <title id="df-title">数据流 - 写入路径与读取路径分离</title>
+  <desc id="df-desc">写入路径:提交意见经 FeedbackController 到 FeedbackServiceImpl.save,并行触发 MySQL 落库与 RabbitMQ 发送。读取路径:GET /list 经 @Cacheable 首次查库写 Redis,二次命中直接返回缓存</desc>
+
+  <defs>
+    <marker id="df-arrow-mute" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#6B7280"/>
+    </marker>
+    <marker id="df-arrow-fg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#E8E4D9"/>
+    </marker>
+    <marker id="df-arrow-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#4A9EFF"/>
+    </marker>
+    <marker id="df-arrow-green" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#6BBE7A"/>
+    </marker>
+  </defs>
+
+  <rect width="1200" height="320" rx="18" fill="#0F1419"/>
+
+  <g id="df-header">
+    <text x="56" y="56" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="26" font-weight="700" fill="#E8E4D9">数据流</text>
+    <text x="56" y="80" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" fill="#8A93A0">写入路径与读取路径分离,缓存按需填充</text>
+  </g>
+
+  <text x="56" y="104" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" fill="#C97064" font-weight="600">写入路径</text>
+
+  <g id="df-write-row">
+    <rect x="56" y="116" width="130" height="48" rx="8" fill="none" stroke="#C97064" stroke-width="1.5"/>
+    <text x="121" y="138" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" fill="#C97064" text-anchor="middle" font-weight="600">提交意见</text>
+    <text x="121" y="156" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10" fill="#6B7280" text-anchor="middle">POST /submit</text>
+
+    <path d="M 186 140 L 208 140" stroke="#6B7280" stroke-width="1.25" fill="none" marker-end="url(#df-arrow-mute)"/>
+
+    <rect x="210" y="116" width="170" height="48" rx="8" fill="none" stroke="#E8E4D9" stroke-width="1.5"/>
+    <text x="295" y="138" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" fill="#E8E4D9" text-anchor="middle" font-weight="600">FeedbackController</text>
+    <text x="295" y="156" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10" fill="#6B7280" text-anchor="middle">.submit()</text>
+
+    <path d="M 380 140 L 402 140" stroke="#6B7280" stroke-width="1.25" fill="none" marker-end="url(#df-arrow-mute)"/>
+
+    <rect x="404" y="116" width="190" height="48" rx="8" fill="none" stroke="#E8E4D9" stroke-width="1.5"/>
+    <text x="499" y="138" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" fill="#E8E4D9" text-anchor="middle" font-weight="600">FeedbackServiceImpl</text>
+    <text x="499" y="156" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10" fill="#6B7280" text-anchor="middle">.save()</text>
+
+    <path d="M 594 140 L 636 140" stroke="#E8E4D9" stroke-width="1.25" fill="none" marker-end="url(#df-arrow-fg)"/>
+    <path d="M 594 140 L 616 140 L 616 192 L 636 192" stroke="#6BBE7A" stroke-width="1.25" fill="none" marker-end="url(#df-arrow-green)"/>
+
+    <rect x="640" y="116" width="210" height="48" rx="8" fill="none" stroke="#E8E4D9" stroke-width="1.5"/>
+    <text x="745" y="138" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" fill="#E8E4D9" text-anchor="middle" font-weight="600">MySQL 落库</text>
+    <text x="745" y="156" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10" fill="#6B7280" text-anchor="middle">feedbackMapper.insert</text>
+
+    <rect x="640" y="168" width="210" height="48" rx="8" fill="none" stroke="#6BBE7A" stroke-width="1.5"/>
+    <text x="745" y="190" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" fill="#6BBE7A" text-anchor="middle" font-weight="600">RabbitMQ 发送</text>
+    <text x="745" y="208" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10" fill="#6B7280" text-anchor="middle">convertAndSend</text>
+  </g>
+
+  <text x="56" y="240" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" fill="#4A9EFF" font-weight="600">读取路径</text>
+
+  <g id="df-read-row">
+    <rect x="56" y="252" width="130" height="48" rx="8" fill="none" stroke="#4A9EFF" stroke-width="1.5"/>
+    <text x="121" y="274" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" fill="#4A9EFF" text-anchor="middle" font-weight="600">GET /list</text>
+    <text x="121" y="292" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10" fill="#6B7280" text-anchor="middle">@Cacheable</text>
+
+    <path d="M 186 276 L 208 276" stroke="#4A9EFF" stroke-width="1.25" fill="none" marker-end="url(#df-arrow-blue)"/>
+
+    <rect x="210" y="252" width="170" height="48" rx="8" fill="none" stroke="#4A9EFF" stroke-width="1.5"/>
+    <text x="295" y="274" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" fill="#4A9EFF" text-anchor="middle" font-weight="600">首次未命中</text>
+    <text x="295" y="292" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10" fill="#6B7280" text-anchor="middle">SELECT 执行</text>
+
+    <path d="M 380 276 L 402 276" stroke="#4A9EFF" stroke-width="1.25" fill="none" marker-end="url(#df-arrow-blue)"/>
+
+    <rect x="404" y="252" width="210" height="48" rx="8" fill="none" stroke="#4A9EFF" stroke-width="1.5"/>
+    <text x="509" y="274" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" fill="#4A9EFF" text-anchor="middle" font-weight="600">写入 Redis</text>
+    <text x="509" y="292" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10" fill="#6B7280" text-anchor="middle">SimpleKey []</text>
+
+    <path d="M 614 276 L 636 276" stroke="#4A9EFF" stroke-width="1.25" fill="none" marker-end="url(#df-arrow-blue)"/>
+
+    <rect x="638" y="252" width="190" height="48" rx="8" fill="none" stroke="#4A9EFF" stroke-width="1.5"/>
+    <text x="733" y="274" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" fill="#4A9EFF" text-anchor="middle" font-weight="600">二次命中</text>
+    <text x="733" y="292" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10" fill="#6B7280" text-anchor="middle">命中缓存</text>
+
+    <path d="M 828 276 L 850 276" stroke="#4A9EFF" stroke-width="1.25" fill="none" marker-end="url(#df-arrow-blue)"/>
+
+    <rect x="852" y="252" width="210" height="48" rx="8" fill="none" stroke="#4A9EFF" stroke-width="1.5"/>
+    <text x="957" y="274" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" fill="#4A9EFF" text-anchor="middle" font-weight="600">直接返回</text>
+    <text x="957" y="292" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10" fill="#6B7280" text-anchor="middle">日志无 SQL</text>
+  </g>
+</svg>

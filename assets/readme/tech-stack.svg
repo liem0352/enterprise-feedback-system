@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 240" width="100%" role="img" aria-labelledby="ts-title ts-desc">
+  <title id="ts-title">技术栈 - 三层架构与 Java 11 运行时</title>
+  <desc id="ts-desc">接入层 Spring Boot 2.7.18 与 Spring MVC 与 Thymeleaf,服务层 MyBatis-Plus 3.5.5 与 Spring Cache 与 @Cacheable,基础设施 MySQL 9.4 与 Redis 与 RabbitMQ,Java 11 运行时</desc>
+
+  <rect width="1200" height="240" rx="18" fill="#0F1419"/>
+
+  <g id="ts-header">
+    <text x="56" y="46" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="26" font-weight="700" fill="#E8E4D9">技术栈</text>
+    <text x="56" y="68" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" fill="#8A93A0">三层架构,Java 11 运行时</text>
+  </g>
+
+  <g id="ts-java-badge">
+    <rect x="1048" y="38" width="104" height="26" rx="13" fill="#161C24" stroke="#C97064" stroke-width="1.5"/>
+    <text x="1100" y="55" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="12" fill="#C97064" text-anchor="middle" font-weight="600">Java 11</text>
+  </g>
+
+  <g id="ts-layer-1">
+    <rect x="48" y="86" width="150" height="42" rx="8" fill="#1A2028" stroke="#C97064" stroke-width="1.5"/>
+    <text x="123" y="112" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" fill="#C97064" text-anchor="middle" font-weight="600">接入层</text>
+    <rect x="206" y="86" width="946" height="42" rx="8" fill="#161C24" stroke="#2A2F36" stroke-width="1"/>
+    <text x="679" y="112" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="14" fill="#E8E4D9" text-anchor="middle">Spring Boot 2.7.18  ·  Spring MVC  ·  Thymeleaf</text>
+  </g>
+
+  <g id="ts-layer-2">
+    <rect x="48" y="138" width="150" height="42" rx="8" fill="#1A2028" stroke="#4A9EFF" stroke-width="1.5"/>
+    <text x="123" y="164" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" fill="#4A9EFF" text-anchor="middle" font-weight="600">服务层</text>
+    <rect x="206" y="138" width="946" height="42" rx="8" fill="#161C24" stroke="#2A2F36" stroke-width="1"/>
+    <text x="679" y="164" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="14" fill="#E8E4D9" text-anchor="middle">MyBatis-Plus 3.5.5  ·  Spring Cache  ·  @Cacheable</text>
+  </g>
+
+  <g id="ts-layer-3">
+    <rect x="48" y="190" width="150" height="42" rx="8" fill="#1A2028" stroke="#6BBE7A" stroke-width="1.5"/>
+    <text x="123" y="216" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" fill="#6BBE7A" text-anchor="middle" font-weight="600">基础设施</text>
+    <rect x="206" y="190" width="946" height="42" rx="8" fill="#161C24" stroke="#2A2F36" stroke-width="1"/>
+    <text x="679" y="216" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="14" fill="#E8E4D9" text-anchor="middle">MySQL 9.4  ·  Redis  ·  RabbitMQ</text>
+  </g>
+</svg>

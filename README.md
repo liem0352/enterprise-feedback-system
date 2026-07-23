@@ -2,12 +2,12 @@
   <img src="assets/readme/hero.svg" alt="企业内部意见反馈系统 - 三链路并行架构:一次提交触发 MySQL 持久化、Redis 缓存、RabbitMQ 消息" width="100%"/>
 </p>
 
-## Proof · 三链路并行证据
+## 三链路并行证据
 
 一次 `POST /submit`,在 `FeedbackServiceImpl.save` 内并行触发三条链路。下方示意图为代码级证据,所有类名、方法名、缓存键、交换器与队列名均与源码一致。
 
 <p align="center">
-  <img src="assets/readme/section-mechanism.svg" alt="核心机制:FeedbackController.submit → FeedbackServiceImpl.save → MySQL insert / Redis @Cacheable / RabbitMQ Fanout" width="100%"/>
+  <img src="assets/readme/section-mechanism.svg" alt="核心机制:FeedbackController.submit 到 FeedbackServiceImpl.save,并行触发 MySQL insert、Redis @Cacheable、RabbitMQ Fanout" width="100%"/>
 </p>
 
 ### 真实类名表
@@ -18,28 +18,38 @@
 | 缓存 | `FinalExamApplication` `RedisConfig` `FeedbackController` | `@EnableCaching` / `Jackson2JsonRedisSerializer` / `@Cacheable("feedbackList")` |
 | 消息 | `RabbitMQConfig` `FeedbackNoticeConsumer` | `feedback.exchange` (Fanout) + `feedback.queue` 绑定 / `@RabbitListener` |
 
-### 运行时证据(缓存键 / 交换器 / 队列名)
+### 运行时证据
 
 - 缓存键:`feedbackList::SimpleKey []`(空参 SimpleKey,首次查库后写入 Redis)
 - 交换器:`feedback.exchange`(Fanout 类型,广播到所有绑定队列)
 - 队列:`feedback.queue`(由 `RabbitMQConfig` 声明并与交换器绑定)
 - 消费者:`FeedbackNoticeConsumer` 通过 `@RabbitListener` 监听,收到消息后在控制台打印
 
-## What it is
+## 这是什么
 
 企业内部反馈系统:员工通过 `/submit` 提交意见,管理员通过 `/list` 查看全部意见。一次提交并行触发 MySQL 持久化、Redis 缓存、RabbitMQ 异步通知三条链路。
 
-## Why different
+## 为什么不同
 
 不是单库 CRUD。`POST /submit` 在一次请求内完成三件事,分别由独立组件承担:
 
-- **MySQL 持久化** — `Feedback` 实体映射 `feedback` 表,`FeedbackMapper extends BaseMapper` 完成单表 CRUD,`feedbackMapper.insert(feedback)` 落库
-- **Redis 缓存** — `/list` 接口标注 `@Cacheable("feedbackList")`,首次查库后写 Redis,第二次访问直接命中缓存,不再执行 SQL
-- **RabbitMQ 消息** — 保存后 `RabbitTemplate` 把 JSON 消息发往 `feedback.exchange`(Fanout),`@RabbitListener` 监听 `feedback.queue` 异步消费,在控制台打印通知
+- **MySQL 持久化** - `Feedback` 实体映射 `feedback` 表,`FeedbackMapper extends BaseMapper` 完成单表 CRUD,`feedbackMapper.insert(feedback)` 落库
+- **Redis 缓存** - `/list` 接口标注 `@Cacheable("feedbackList")`,首次查库后写 Redis,第二次访问直接命中缓存,不再执行 SQL
+- **RabbitMQ 消息** - 保存后 `RabbitTemplate` 把 JSON 消息发往 `feedback.exchange`(Fanout),`@RabbitListener` 监听 `feedback.queue` 异步消费,在控制台打印通知
 
 三条链路并行,互不阻塞:用户提交即时返回,缓存命中率可观测,通知消费解耦。
 
-## How it works
+<p align="center">
+  <img src="assets/readme/three-chain-architecture.svg" alt="三链路并行架构:持久化链、缓存链、通知链从 FeedbackServiceImpl.save 并行触发" width="100%"/>
+</p>
+
+## 如何运转
+
+写入路径与读取路径分离,缓存按需填充。
+
+<p align="center">
+  <img src="assets/readme/data-flow.svg" alt="数据流:写入路径提交到 save 并行触发 MySQL 与 RabbitMQ,读取路径 GET /list 经 @Cacheable 首次查库写 Redis 二次命中直接返回" width="100%"/>
+</p>
 
 ```
 POST /submit (FeedbackController.submit)
@@ -58,7 +68,23 @@ POST /submit (FeedbackController.submit)
 - `FeedbackNoticeConsumer` 使用 `@RabbitListener` 监听 `feedback.queue`,消费时反序列化 JSON 并在控制台输出
 - 视图层使用 Thymeleaf:`th:action` / `th:object` / `th:field` 渲染表单,`th:each` 遍历列表,玻璃化 UI + SVG 图标 + 响应式布局
 
-## How to use
+## 业务域
+
+五个功能面,覆盖提交、查询、存储、缓存、通知。
+
+<p align="center">
+  <img src="assets/readme/business-modules.svg" alt="业务域:反馈提交、反馈列表、持久化层、缓存层、异步通知五个功能面" width="100%"/>
+</p>
+
+## 反馈数据生命周期
+
+一条意见从提交到异步消费的完整路径。
+
+<p align="center">
+  <img src="assets/readme/feedback-lifecycle.svg" alt="反馈数据生命周期:用户提交、MySQL 落库、Redis 缓存、RabbitMQ 消费四个阶段" width="100%"/>
+</p>
+
+## 如何使用
 
 ### 环境要求
 
@@ -121,11 +147,16 @@ mvn spring-boot:run
 
 提交一条意见后,控制台立即输出 `FeedbackNoticeConsumer` 收到的消息(JSON 内容,含意见字段),证明 Fanout 交换器与队列绑定生效、异步消费链路打通。
 
+## 技术栈
+
+<p align="center">
+  <img src="assets/readme/tech-stack.svg" alt="技术栈:接入层 Spring Boot 2.7.18、服务层 MyBatis-Plus 3.5.5、基础设施 MySQL Redis RabbitMQ,Java 11 运行时" width="100%"/>
+</p>
+
 ## 测试数据
 
 `sql/init.sql` 内置 3 条 liem 的意见数据,启动后可直接在 `/list` 页面看到,无需手动构造。
 
----
-
-作者:**liem** · Spring Boot 2.7.18 · MyBatis-Plus 3.5.5 · Java 11
-所有前端页面底部显示"作者:liem",数据库与日志中含 liem 标识。
+<p align="center">
+  <img src="assets/readme/footer.svg" alt="README MADE WITH beautify-github-readme 与 design-taste-frontend,作者 liem" width="100%"/>
+</p>
